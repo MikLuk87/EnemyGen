@@ -6,11 +6,10 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private int _enemyQuantity;
     [SerializeField] private float _spawnDelay;
-    [SerializeField] private Transform _enemy;
-    [SerializeField] private List<Transform> _spawnPoints;
+    [SerializeField] private List<Transform> _enemys;
+    [SerializeField] private List<Transform> _targets;
 
-    private Vector3 _position;
-    private Quaternion _rotation;
+    public static Transform Target;
 
     private void Start()
     {
@@ -20,20 +19,19 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator Spawn()
     {
         var wait = new WaitForSeconds(_spawnDelay);
-        int spawnPointNumber;
+        int index;
 
         for (int i = 0; i < _enemyQuantity; i++)
         {
-            spawnPointNumber = PointSelect();
-            _position = _spawnPoints[spawnPointNumber].position;
-            _rotation = _spawnPoints[spawnPointNumber].rotation;
-            Instantiate(_enemy, _position, _rotation);
+            index = GetRandomIndex();
+            Target = _targets[index];
+            Instantiate(_enemys[index]);
             yield return wait;
         }
     }
 
-    private int PointSelect()
+    private int GetRandomIndex()
     {
-        return Random.Range(0, _spawnPoints.Count);
+        return Random.Range(0, _enemys.Count);
     }
 }
